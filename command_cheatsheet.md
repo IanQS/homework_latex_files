@@ -118,10 +118,13 @@ Images are looked up in `images/` automatically (`\graphicspath`).
 
 | Command                    | What it does                | When to use                                                           |
 | -------------------------- | --------------------------- | --------------------------------------------------------------------- |
-| `\todo{note}`              | Margin note while drafting  | Reminders to yourself; auto-hidden in the final build                 |
+| `\todo{note}`              | Margin note while drafting  | A task to act on; auto-hidden in the final build                      |
 | `\todo[inline]{note}`      | Inline (in-text) note       | Longer reminders                                                      |
+| `\note{note}`              | Blue "note-to-self" (NOTE:) | An observation, not a task; same auto-hide as `\todo`                 |
+| `\note[inline]{note}`      | Inline note-to-self         | Longer notes                                                          |
 | `\listoftodos`             | Collected list of all todos | A drafting checklist page                                             |
-| `\newcommand{\finaldoc}{}` | Hides all `\todo` notes     | Uncomment it (above `\usepackage{...style}`) for the submission build |
+| `make notes` / on save     | Compile todos + notes -> `NOTES.md` | One digest of every `\todo`/`\note` with its file + section; auto-runs on each build |
+| `\newcommand{\finaldoc}{}` | Hides all `\todo`/`\note`   | Uncomment it (above `\usepackage{...style}`) for the submission build |
 
 ---
 

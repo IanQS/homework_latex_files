@@ -16,16 +16,18 @@ styles/
   hwstyle.sty    homework: question/answer environments, HW headers, title page
   essaystyle.sty essay: running headers, bibliography (biblatex/biber)
 images/          figures (\graphicspath points here)
-build/           auxiliary files (.aux/.log/.bbl/.bcf/...) — git-ignored, auto-cleaned
+build/           all build output (.aux/.log/.pdf/.synctex.gz/...) — git-ignored
 Makefile         build/new/clean/watch wrappers
-.latexmkrc       latexmk config: aux -> build/, PDF at top level, styles/ on path
+.latexmkrc       latexmk config: everything -> build/, styles/ on path
 .helix/          editor config + typewriter writing mode
 ```
 
-Auxiliary files are written to `build/` (kept out of git), so the working tree
-only ever shows your sources and the final PDF — no `make clean` needed between
-builds. The `styles/` folder is on the LaTeX search path via `.latexmkrc`, so the
-entry files still just say `\usepackage{hwstyle}` with no path prefix.
+All build output — aux files, the PDF, and synctex — is written to `build/` (kept
+out of git), so the working tree only ever shows your sources; no `make clean`
+needed between builds. `make build` copies the finished PDF up to the repo root
+as the committable deliverable, and the editor views `build/<file>.pdf` directly.
+The `styles/` folder is on the LaTeX search path via `.latexmkrc`, so the entry
+files still just say `\usepackage{hwstyle}` with no path prefix.
 
 When you fork it for a specific piece of work, keep the entry file you need
 (`hw.tex` or `essay.tex`) and delete the other if you like — the shared
@@ -41,6 +43,7 @@ make                  # build hw.tex (default)
 make FILE=essay       # build essay.tex
 make watch FILE=essay # rebuild on every save
 make wordcount FILE=essay  # prose-aware word count
+make notes            # compile all \todo + \note into NOTES.md (auto-runs on build)
 make clean            # remove aux files, keep the PDF
 make cleanall         # remove aux files and the PDF
 ```

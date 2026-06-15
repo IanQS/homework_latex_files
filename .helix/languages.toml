@@ -22,16 +22,34 @@ BIBINPUTS = ".:"
 [language-server.texlab.config.texlab]
 auxDirectory = "build"
 
+# Completion matching. The default "fuzzy-ignore-case" does subsequence matching,
+# so typing "shiu" matches keys like "gerstnerlabCNS21BiophysicsNeurons2023"
+# (the letters s-h-i-u appear in order). "prefix-ignore-case" keeps only items
+# that START with what you typed -- so "shiu" matches Zotero keys beginning
+# "shiu..." (author-first keys), killing the false positives.
+[language-server.texlab.config.texlab.completion]
+matcher = "prefix-ignore-case"
+
+# Render the actual symbol glyph (e.g. ∑, α) when hovering a command/symbol,
+# instead of a textual description.
+[language-server.texlab.config.texlab.hover]
+symbols = "glyph"
+
 [language-server.texlab.config.texlab.build]
 executable = "latexmk"
-# No -pdf here: that would force pdfLaTeX. .latexmkrc selects LuaLaTeX.
-# -outdir=build keeps the editor's throwaway PDF next to its aux files; the
-# committed PDF from `make` still lands at the repo top level.
-args = ["-outdir=build", "-interaction=nonstopmode", "%f"]
+# No -pdf (that forces pdfLaTeX) and no -outdir: .latexmkrc is the single source
+# of truth -- it selects LuaLaTeX and sends ALL output (aux + pdf + synctex) to
+# build/. The editor and `make` therefore build to the exact same place, so they
+# never thrash latexmk's fdb cache. Point your viewer at build/<file>.pdf.
+args = ["-interaction=nonstopmode", "%f"]
 pdfDirectory = "build"
 onSave = true
 forwardSearchAfter = true
 
+# Forward search into Skim (editor -> PDF). Runs after each on-save build because
+# forwardSearchAfter = true. `-g` reloads/jumps in the background so Skim doesn't
+# steal focus on every save. %p resolves to build/<file>.pdf via pdfDirectory.
+# (On Linux, swap this for e.g. zathura: args = ["--synctex-forward", "%l:%f", "%p"].)
 [language-server.texlab.config.texlab.forwardSearch]
-executable = "zathura"
-args = ["--synctex-forward", "%l:%f", "./build/%p"]
+executable = "/Applications/Skim.app/Contents/SharedSupport/displayline"
+args = ["-g", "%l", "%p", "%f"]

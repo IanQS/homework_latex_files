@@ -13,6 +13,26 @@
 \RequirePackage[backend=biber,style=phys,sorting=none,articletitle=true]{biblatex}
 \addbibresource{references.bib}      % Your .bib file
 
+% Nature-style \textcite: keep the auto-generated author names ("Cook et al.") but
+% render the number as a SUPERSCRIPT ("Cook et al.²") instead of numeric-comp's
+% default bracketed "Cook et al. [2]". This makes \textcite match \autocite so the
+% whole document is uniformly superscript. (Single key is the common case; multiple
+% keys for the SAME author are not compressed -- use \autocite{a,b} for that.)
+\DeclareCiteCommand{\textcite}
+  {}%
+  {\usebibmacro{citeindex}%
+   \ifnameundef{labelname}
+     {\printfield[citetitle]{labeltitle}}
+     {\printnames{labelname}}%
+   \mkbibsuperscript{\printtext[bibhyperref]{\printfield{labelprefix}\printfield{labelnumber}}}}%
+  {\multicitedelim}%
+  {}
+
+% Safety net: make plain \cite superscript too (alias to \autocite) so an old-habit
+% \cite{} can't reintroduce bracketed "[1]". \autocite/\parencite/\textcite keep
+% their own meanings; only bare \cite changes.
+\let\cite\autocite
+
 % Uncomment for wider line spacing (common for submitted essays):
 %\onehalfspacing
 

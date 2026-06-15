@@ -1,5 +1,6 @@
-# LaTeX template Makefile. Build settings live in .latexmkrc (aux -> build/,
-# PDF stays at top level, styles/ on the search path).
+# LaTeX template Makefile. Build settings live in .latexmkrc (everything ->
+# build/, styles/ on the search path). `make build` copies the finished PDF up
+# to the repo root as the committable deliverable.
 #
 #   make                 build hw.tex (the default)
 #   make FILE=essay      build essay.tex (runs biber for the bibliography)
@@ -9,6 +10,8 @@
 #   make watch FILE=...  rebuild continuously as you edit
 #   make write FILE=...  open the file in Helix "typewriter" mode
 #   make wordcount FILE=... prose-aware word count (skips LaTeX markup)
+#   make notes           compile all \todo + \note annotations into NOTES.md
+#                        (also runs automatically on every build / editor save)
 #   make clean           remove the build/ aux files (keep the PDF)
 #   make cleanall        remove the build/ aux files AND the PDF
 #
@@ -16,10 +19,11 @@
 
 FILE ?= hw
 
-.PHONY: build new watch write wordcount clean cleanall
+.PHONY: build new watch write wordcount notes clean cleanall
 
 build:
 	latexmk $(FILE).tex
+	@cp -f build/$(FILE).pdf $(FILE).pdf   # publish a committable copy of the PDF at the repo root
 
 new:
 	@test -n "$(Q)" || { echo "usage: make new Q=<number> [FILE=hw|essay]"; exit 1; }
@@ -38,6 +42,9 @@ write:
 
 wordcount:
 	@texcount -inc -sum -brief $(FILE).tex
+
+notes:
+	@python3 scripts/collect-notes.py
 
 clean:
 	latexmk -c $(FILE).tex

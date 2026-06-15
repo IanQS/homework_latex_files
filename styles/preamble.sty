@@ -112,6 +112,14 @@
 	\RequirePackage[colorinlistoftodos,textsize=footnotesize]{todonotes}
 \fi
 
+% \note[opts]{...}: a "note-to-self" while drafting -- distinct from \todo, which
+% is a task to act on. Built on todonotes, so it inherits the same auto-hide under
+% \finaldoc, but renders in blue and is tagged NOTE so it reads differently on the
+% page. scripts/collect-notes.py scrapes \todo and \note separately into NOTES.md,
+% each tagged with its source file and section breadcrumb (runs on every build).
+% Use \note[inline]{...} for an in-flow box, like \todo[inline]{...}.
+\newcommand{\note}[2][]{\todo[color=blue!18,bordercolor=blue!55,#1]{\textbf{NOTE:} #2}}
+
 %----------------------------------------------------------------------------------------
 %	DOCUMENT SPLITTING
 %	Split a long assignment/essay into one file per question under parts/, each a

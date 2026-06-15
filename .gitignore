@@ -1,5 +1,10 @@
-## latexmk aux/build directory (see .latexmkrc) — the PDF stays at the top level
+## latexmk build directory (see .latexmkrc) — all build output incl. the PDF;
+## `make build` copies the final PDF to the repo root as the committable deliverable
 /build/
+
+## Generated draft annotations digest (scripts/collect-notes.py, runs on build)
+/NOTES.md
+scripts/__pycache__/
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
