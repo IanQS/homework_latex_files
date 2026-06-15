@@ -10,6 +10,8 @@
 #   make watch FILE=...  rebuild continuously as you edit
 #   make write FILE=...  open the file in Helix "typewriter" mode
 #   make wordcount FILE=... prose-aware word count (skips LaTeX markup)
+#   make notes           compile all \todo + \note annotations into NOTES.md
+#                        (also runs automatically on every build / editor save)
 #   make clean           remove the build/ aux files (keep the PDF)
 #   make cleanall        remove the build/ aux files AND the PDF
 #
@@ -17,7 +19,7 @@
 
 FILE ?= hw
 
-.PHONY: build new watch write wordcount clean cleanall
+.PHONY: build new watch write wordcount notes clean cleanall
 
 build:
 	latexmk $(FILE).tex
@@ -40,6 +42,9 @@ write:
 
 wordcount:
 	@texcount -inc -sum -brief $(FILE).tex
+
+notes:
+	@python3 scripts/collect-notes.py
 
 clean:
 	latexmk -c $(FILE).tex

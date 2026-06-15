@@ -23,3 +23,15 @@ $out_dir = 'build';
 # and let biber find references.bib at the top level.
 $ENV{'TEXINPUTS'} = '.:styles:' . ($ENV{'TEXINPUTS'} // '') . ':';
 $ENV{'BIBINPUTS'} = '.:'         . ($ENV{'BIBINPUTS'} // '') . ':';
+
+# --- Draft annotations -> NOTES.md -----------------------------------------
+# Collect every \todo and \note (note-to-self) into NOTES.md, each tagged with
+# its source file and section breadcrumb. See scripts/collect-notes.py.
+#
+# Wired here because everyone builds through latexmk: texlab's on-save build,
+# `make build`, and `make watch` all read this file. The top-level system() runs
+# once per fresh latexmk launch (covers on-save + `make build`); $compiling_cmd
+# re-runs it on every rebuild during `make watch` (latexmk -pvc stays resident).
+my $collect_notes = 'python3 scripts/collect-notes.py';
+system($collect_notes) if -e 'scripts/collect-notes.py';
+$compiling_cmd = $collect_notes;

@@ -2,6 +2,10 @@
 ## `make build` copies the final PDF to the repo root as the committable deliverable
 /build/
 
+## Generated draft annotations digest (scripts/collect-notes.py, runs on build)
+/NOTES.md
+scripts/__pycache__/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
