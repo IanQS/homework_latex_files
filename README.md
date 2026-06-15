@@ -43,6 +43,7 @@ make                  # build hw.tex (default)
 make FILE=essay       # build essay.tex
 make watch FILE=essay # rebuild on every save
 make wordcount FILE=essay  # prose-aware word count
+make notes            # compile all \todo + \note into NOTES.md (auto-runs on build)
 make clean            # remove aux files, keep the PDF
 make cleanall         # remove aux files and the PDF
 ```
